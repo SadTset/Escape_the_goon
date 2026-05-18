@@ -11,7 +11,7 @@ Even though your supervisor repeatedly told you to push your commits regularly, 
 
 Then the power suddenly goes out.
 
-The building becomes completely dark, your work is at risk of being lost, and somewhere in the hallways, your supervisor — known as "The Goon" — is still in the building.
+The building becomes completely dark, your work is at risk of being lost, and somewhere in the hallways, your supervisor  known as "The Goon" is still in the building.
 
 Your objective is to restore the power, push your commits before your work is lost, and escape before The Goon finds out.
 

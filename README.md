@@ -5,7 +5,7 @@ The game is inspired by old first-person corridor horror games with limited visi
 
 ## Story
 
-You stayed too long at work and still have not pushed your commits.
+You stayed at work late and still have not pushed your commits.
 
 Even though your supervisor repeatedly told you to push your commits regularly, you always waited until the very end of the day.
 

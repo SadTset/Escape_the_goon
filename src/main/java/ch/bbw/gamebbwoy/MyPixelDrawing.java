@@ -1,11 +1,14 @@
 package ch.bbw.gamebbwoy;
+import java.util.Random;
 
+import ch.bbw.gamebbwoy.Classes.Hallway;
+import ch.bbw.gamebbwoy.Classes.HallwayLeft;
+import ch.bbw.gamebbwoy.Classes.HallwayRight;
 import ch.bbw.gamebbwoy.api.ButtonListener;
 import ch.bbw.gamebbwoy.api.PixelColor;
 import ch.bbw.gamebbwoy.api.PixelDisplay;
 import ch.bbw.gamebbwoy.api.PixelDrawing;
 import ch.bbw.gamebbwoy.internal.GameBbwoy;
-import ch.bbw.gamebbwoy.Classes.backgrounds;
 
 public class MyPixelDrawing implements PixelDrawing, ButtonListener {
 	private int hallwayNumber = 0;
@@ -21,36 +24,49 @@ public class MyPixelDrawing implements PixelDrawing, ButtonListener {
 		
 		
 
-		int[][] activeHallway;
+		int[][] activeHallway = Hallway.hallway;
 		if (hallwayNumber == 0) {
-			activeHallway = backgrounds.hallway;
+			activeHallway = Hallway.hallway2;
 		} else if (hallwayNumber == 1) {
-			activeHallway = backgrounds.hallway2;
+			activeHallway = Hallway.hallway3;
 		} else if (hallwayNumber == 2){
-			activeHallway = backgrounds.hallway3;
+			activeHallway = HallwayRight.hallwayRight;
 		} else if (hallwayNumber == 3) {
-			activeHallway = backgrounds.hallwayRight;
+			activeHallway = HallwayLeft.hallwayLeft;
 		} else if (hallwayNumber == 4) {
-			activeHallway = backgrounds.hallwayLeft;
-		}
+			activeHallway = Hallway.hallwayCross;
+		} 
 		drawScaledSprite(graphic, activeHallway, 0, 0, graphic.getPixelWidth(), graphic.getPixelHeight());
 
 	}
 
 	@Override
 	public void onButtonPress(ButtonListener.GameButton button) {
-		if (button == ButtonListener.GameButton.UP) {
-			hallwayNumber = 1;
-		} else if (button == ButtonListener.GameButton.LEFT) {
-			hallwayNumber = 
+		int oldHallwayNumber = hallwayNumber;
+		if (button == ButtonListener.GameButton.UP && hallwayNumber == 0) {
+			hallwayNumber = 0;
+		} else if (button == ButtonListener.GameButton.LEFT && hallwayNumber == 3) {
+			hallwayNumber = 3;
 		}
+		else if (button == ButtonListener.GameButton.RIGHT && hallwayNumber== 2 ) {
+			hallwayNumber = 2;
+		} else if (button == ButtonListener.GameButton.DOWN && hallwayNumber == 1) {
+			hallwayNumber = 1;
+		} else if (button == ButtonListener.GameButton.UP && hallwayNumber == 0) {
+			hallwayNumber = 0;
+		} else if (button == ButtonListener.GameButton.LEFT || button == ButtonListener.GameButton.RIGHT) {
+			hallwayNumber = 4;
+		}
+
+	Random hallwayRandom = new Random();
+		hallwayNumber = ((button == ButtonListener.GameButton.UP && hallwayNumber == 0) || (button == ButtonListener.GameButton.LEFT && hallwayNumber == 3) || (button == ButtonListener.GameButton.RIGHT && hallwayNumber == 2) || (button == ButtonListener.GameButton.DOWN && hallwayNumber == 1) || (button == ButtonListener.GameButton.UP && hallwayNumber == 0)) || ((button == ButtonListener.GameButton.LEFT || button == ButtonListener.GameButton.RIGHT) && oldHallwayNumber == 4) ? hallwayRandom.nextInt(5) : oldHallwayNumber;
 	}
 
 	@Override
 	public void onButtonRelease(ButtonListener.GameButton button) {
 	}
 
-	static void drawSprite(PixelDisplay graphic, int [][] sprite, int xOffset, int yOffset) {
+	/*static void drawSprite(PixelDisplay graphic, int [][] sprite, int xOffset, int yOffset) {
 		for (int y = 0; y < sprite.length; y++) {
 			for (int x = 0; x < sprite[y].length; x++) {
 				var colorNumber = sprite[y][x];
@@ -62,7 +78,7 @@ public class MyPixelDrawing implements PixelDrawing, ButtonListener {
 			}
 		}
 	}
-
+*/
 	static void drawScaledSprite(PixelDisplay graphic, int[][] sprite, int xOffset, int yOffset, int targetWidth, int targetHeight) {
 		for (int y = 0; y < targetHeight; y++) {
 			int sourceY = y * sprite.length / targetHeight;

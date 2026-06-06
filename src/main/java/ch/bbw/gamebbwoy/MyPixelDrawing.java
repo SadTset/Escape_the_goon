@@ -5,6 +5,7 @@ import java.util.Random;
 import ch.bbw.gamebbwoy.Classes.Hallway;
 import ch.bbw.gamebbwoy.Classes.HallwayLeft;
 import ch.bbw.gamebbwoy.Classes.HallwayRight;
+import ch.bbw.gamebbwoy.Classes.desk;
 import ch.bbw.gamebbwoy.Classes.everythingelse;
 import ch.bbw.gamebbwoy.api.ButtonListener;
 import ch.bbw.gamebbwoy.api.PixelColor;
@@ -13,7 +14,7 @@ import ch.bbw.gamebbwoy.api.PixelDrawing;
 import ch.bbw.gamebbwoy.internal.GameBbwoy;
 
 public class MyPixelDrawing implements PixelDrawing, ButtonListener {
-	private int hallwayNumber = 0;
+	private int backgroundNumber = 0;
 	private boolean titleScreen = true;
 	private final Random hallwayRandom = new Random();
  	private final ArrayDeque<Integer> hallwayHistory = new ArrayDeque<>();
@@ -38,7 +39,7 @@ public class MyPixelDrawing implements PixelDrawing, ButtonListener {
 		return;
 	}
 
-    int[][] activeHallway = switch (hallwayNumber) {
+    int[][] background = switch (backgroundNumber) {
         case 0 -> Hallway.hallway;
         case 1 -> Hallway.hallway2;
         case 2 -> Hallway.hallway3;
@@ -46,12 +47,13 @@ public class MyPixelDrawing implements PixelDrawing, ButtonListener {
         case 4 -> HallwayLeft.hallwayLeft;
 		case 5 -> Hallway.hallwayCross;
 		case 6 -> Hallway.hallwayDeadEnd;
+		case 7 -> desk.deskStart;
         default -> Hallway.hallway;
     };
 
     drawScaledSprite(
             graphic,
-            activeHallway,
+            background,
             0,
             0,
             graphic.getPixelWidth(),
@@ -65,25 +67,31 @@ public void onButtonPress(ButtonListener.GameButton button) {
 
 	if (titleScreen && button == ButtonListener.GameButton.SPACE) {
 		titleScreen = false;
+		backgroundNumber = 7;
+		return;
+	}
+
+	if (backgroundNumber == 7 && button == ButtonListener.GameButton.SPACE) {
+		backgroundNumber = 0;
 		return;
 	}
 
     if (button == ButtonListener.GameButton.DOWN) {
         if (!hallwayHistory.isEmpty()) {
-            hallwayNumber = hallwayHistory.pop();
+            backgroundNumber = hallwayHistory.pop();
         }
         return;
     }
 
     boolean canMove =
-            (button == ButtonListener.GameButton.UP && hallwayNumber == 0 || hallwayNumber == 1 || hallwayNumber == 2)
-            || (button == ButtonListener.GameButton.RIGHT && hallwayNumber == 3)
-            || (button == ButtonListener.GameButton.LEFT && hallwayNumber == 4)
-            || ((button == ButtonListener.GameButton.LEFT || button == ButtonListener.GameButton.RIGHT) && hallwayNumber == 5);
+            (button == ButtonListener.GameButton.UP && (backgroundNumber == 0 || backgroundNumber == 1 || backgroundNumber == 2))
+            || (button == ButtonListener.GameButton.RIGHT && backgroundNumber == 3)
+            || (button == ButtonListener.GameButton.LEFT && backgroundNumber == 4)
+            || ((button == ButtonListener.GameButton.LEFT || button == ButtonListener.GameButton.RIGHT) && backgroundNumber == 5);
 
     if (canMove) {
-        hallwayHistory.push(hallwayNumber);
-        hallwayNumber = hallwayRandom.nextInt(7);
+        hallwayHistory.push(backgroundNumber);
+        backgroundNumber = hallwayRandom.nextInt(7);
     }
 }
 

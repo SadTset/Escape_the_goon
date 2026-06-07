@@ -12,12 +12,14 @@ import ch.bbw.gamebbwoy.api.PixelColor;
 import ch.bbw.gamebbwoy.api.PixelDisplay;
 import ch.bbw.gamebbwoy.api.PixelDrawing;
 import ch.bbw.gamebbwoy.internal.GameBbwoy;
+import ch.bbw.gamebbwoy.Classes.props;
 
 public class MyPixelDrawing implements PixelDrawing, ButtonListener {
 	private int backgroundNumber = 0;
 	private boolean titleScreen = true;
 	private final Random hallwayRandom = new Random();
  	private final ArrayDeque<Integer> hallwayHistory = new ArrayDeque<>();
+	private boolean powerOn = false;
 	public static void main(String[] args) throws Throwable {
 		GameBbwoy.playGame(new MyPixelDrawing());
 		
@@ -48,6 +50,9 @@ public class MyPixelDrawing implements PixelDrawing, ButtonListener {
 		case 5 -> Hallway.hallwayCross;
 		case 6 -> Hallway.hallwayDeadEnd;
 		case 7 -> desk.deskStart;
+		case 8 -> everythingelse.blackout;
+		case 9 -> props.leverOff;
+		case 10 -> props.leverOn;
         default -> Hallway.hallway;
     };
 
@@ -65,16 +70,27 @@ public class MyPixelDrawing implements PixelDrawing, ButtonListener {
 	@Override
 public void onButtonPress(ButtonListener.GameButton button) {
 
-	if (titleScreen && button == ButtonListener.GameButton.SPACE) {
-		titleScreen = false;
-		backgroundNumber = 7;
-		return;
-	}
+    if (titleScreen && button == ButtonListener.GameButton.SPACE) {
+        titleScreen = false;
+        backgroundNumber = 7;
+        return;
+    }
 
-	if (backgroundNumber == 7 && button == ButtonListener.GameButton.SPACE) {
-		backgroundNumber = 0;
-		return;
-	}
+    if (backgroundNumber == 7 && button == ButtonListener.GameButton.SPACE) {
+        backgroundNumber = 8;
+        return;
+    }
+
+    if (backgroundNumber == 8 && button == ButtonListener.GameButton.SPACE) {
+        backgroundNumber = 0;
+        return;
+    }
+
+    if (backgroundNumber == 9 && button == ButtonListener.GameButton.SPACE) {
+        powerOn = true;
+        backgroundNumber = 10;
+        return;
+    }
 
     if (button == ButtonListener.GameButton.DOWN) {
         if (!hallwayHistory.isEmpty()) {
@@ -91,7 +107,14 @@ public void onButtonPress(ButtonListener.GameButton button) {
 
     if (canMove) {
         hallwayHistory.push(backgroundNumber);
-        backgroundNumber = hallwayRandom.nextInt(7);
+
+        int randomBackground = hallwayRandom.nextInt(powerOn ? 7 : 8);
+
+        if (randomBackground == 7) {
+            backgroundNumber = 9;
+        } else {
+            backgroundNumber = randomBackground;
+        }
     }
 }
 
@@ -99,20 +122,7 @@ public void onButtonPress(ButtonListener.GameButton button) {
 public void onButtonRelease(ButtonListener.GameButton button) {
 }
 
-	/*static void drawSprite(PixelDisplay graphic, int [][] sprite, int xOffset, int yOffset) {
-		for (int y = 0; y < sprite.length; y++) {
-			for (int x = 0; x < sprite[y].length; x++) {
-				var colorNumber = sprite[y][x];
-				if (colorNumber == 4) {
-					continue;
-				}
-				var color = PixelColor.fromValue((colorNumber));
-				graphic.setPixel(x + xOffset, y + yOffset, color);
-			}
-		}
-	}
-*/
-	static void drawScaledSprite(PixelDisplay graphic, int[][] sprite, int xOffset, int yOffset, int targetWidth, int targetHeight) {
+static void drawScaledSprite(PixelDisplay graphic, int[][] sprite, int xOffset, int yOffset, int targetWidth, int targetHeight) {
 		for (int y = 0; y < targetHeight; y++) {
 			int sourceY = y * sprite.length / targetHeight;
 			for (int x = 0; x < targetWidth; x++) {

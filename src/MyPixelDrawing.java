@@ -12,7 +12,6 @@ import ch.bbw.gamebbwoy.api.ButtonListener;
 import ch.bbw.gamebbwoy.api.PixelColor;
 import ch.bbw.gamebbwoy.api.PixelDisplay;
 import ch.bbw.gamebbwoy.api.PixelDrawing;
-import ch.bbw.gamebbwoy.internal.GameBbwoy;
 
 public class MyPixelDrawing implements PixelDrawing, ButtonListener {
 	private int backgroundNumber = 0;
@@ -20,10 +19,7 @@ public class MyPixelDrawing implements PixelDrawing, ButtonListener {
 	private final Random hallwayRandom = new Random();
  	private final ArrayDeque<Integer> hallwayHistory = new ArrayDeque<>();
 	private boolean powerOn = false;
-	public static void main(String[] args) throws Throwable {
-		GameBbwoy.playGame(new MyPixelDrawing());
-		
-	}
+	
 
 	@Override
 	public void tick(PixelDisplay graphic) {

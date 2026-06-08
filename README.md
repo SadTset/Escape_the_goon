@@ -47,7 +47,7 @@ If The Goon catches the player before the commits are pushed, the game is over.
 | W / Arrow Up | Move forward |
 | A / Arrow Left | Turn left |
 | D / Arrow Right | Turn right |
-| ESC | Quit game |
+| SPACE | Start game / Interact |
 
 ## Technologies
 
